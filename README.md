@@ -31,6 +31,13 @@ This downloads 10 documents at a time by default.
 
 If you set up an .env file in this directory, you can adjust settings as described further down this document (e.g. if you want to do more documents at a time)
 
+## Uninstall npm package
+
+If you want to uninstall the npm package so the quorabak command goes away, use this command:
+
+```sh
+npm uninstall -g quora-backup
+
 ## Prerequisites
 
 ### Node.js and npm
