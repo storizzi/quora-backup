@@ -14,12 +14,10 @@ It keeps a note of all the questions it has already scraped so that it doesn't t
 
 There are a number of pre-requisites (see below) you may need to install depending on how you have things set up.
 
-If you download the `install_dependencies.zsh` script this will install the required dependencies for you (in an opinionated way) and installs the Quora Backup script as a command called 'quorabak'
+If you download the `install_dependencies.zsh` script this will install the required dependencies for you (in an opinionated way) and if it cannot find it, it will prompt you on where to install the Quora Backup script as a command called 'quorabak' (press y to confirm).
 
 ```sh
-curl -O https://raw.githubusercontent.com/storizzi/quora-backup/master/install_dependencies.zsh && ./install_dependencies.zsh
-
-npm install -g git+https://github.com/storizzi/quora-backup.git
+curl -O https://raw.githubusercontent.com/storizzi/quora-backup/master/install_dependencies.zsh && chmod +x ./install_dependencies.zsh && ./install_dependencies.zsh
 ```
 
 Then go to whichever directory you want to download the files to and run the quorabak command with your Quora User Name - e.g.:
@@ -166,16 +164,19 @@ The variables and their descriptions are as follows:
 
 - `QUORA_USERNAME`: The Quora username whose answers you want to back up. This can also be passed as a command line parameter.
 - `NUM_ITEMS`: The number of items to back up. Default is 10.
+- `INCLUDE_ANSWER_TEXT`: Set to `true`, `yes`, `1`, or `on` to include the answer text in the backup. This is on by default. Turn it off if you just want a list of locations for your answers in the answers.json file.
+- `OUTPUT_MARKDOWN_FILES`: Set to `true`, `yes`, `1`, or `on` to output Markdown files. This is on by default.
+- `OUTPUT_HTML_FILES`: Set to `true`, `yes`, `1`, or `on` to output cleaned HTML files. This is on by default.
+- `HTML_WIDTH`: The maximum width for HTML lines. Default is 80 characters.
+DEBUG_ENV_VARS=false
+- `OUTPUT_MARKDOWN_FILES`: Set to `true`, `yes`, `1`, or `on` to output Markdown files. This is on by default.
 - `MAX_RETRIES`: The maximum number of retries for scraping. Default is 20.
 - `SCROLL_TIMEOUT_MS`: The timeout for scrolling the page. Default is 1000 ms.
 - `ANSWER_CLICK_MS`: The delay after clicking an answer. Default is 300 ms.
-- `CONSOLE_OUTPUT`: Set to `true`, `yes`, `1`, or `on` to enable console output.
-- `DEBUG_HTML`: Set to `true`, `yes`, `1`, or `on` to enable HTML debugging output.
-- `INCLUDE_ANSWER_TEXT`: Set to `true`, `yes`, `1`, or `on` to include the answer text in the backup. This is on by default. Turn it off if you just want a list of locations for your answers in the answers.json file.
-- `HTML_TEMPLATE_FILENAME`: The HTML template filename. Default is `template.html` in the script directory.
-- `OUTPUT_HTML_FILES`: Set to `true`, `yes`, `1`, or `on` to output cleaned HTML files. This is on by default.
-- `OUTPUT_MARKDOWN_FILES`: Set to `true`, `yes`, `1`, or `on` to output Markdown files. This is on by default.
-- `HTML_WIDTH`: The maximum width for HTML lines. Default is 80 characters.
+- `HTML_TEMPLATE_FILENAME`: The HTML template filename. Default is `template.html` in the script directory. The template should contain `{{title}}` for where the question title should appear and `{{content}}` for where the answer should appear. The default file is in the source code directory.
+- `CONSOLE_OUTPUT`: Set to `true`, `yes`, `1`, or `on` to enable console output of data for debugging purposes. Default is false.
+- `DEBUG_HTML`: Set to `true`, `yes`, `1`, or `on` to enable HTML debugging output. Default is false.
+- `DEBUG_ENV_VARS`: Set to `true`, `yes`, `1`, or `on` to debug where environment variables are being set from and how they are being overriden. Default is false.
 
 ### Using a `.env` File
 
@@ -194,6 +195,7 @@ HTML_TEMPLATE_FILENAME=template.html
 OUTPUT_HTML_FILES=true
 OUTPUT_MARKDOWN_FILES=true
 HTML_WIDTH=80
+DEBUG_ENV_VARS=false
 ```
 
 Note - you do not have to include all of these - e.g. if you just wanted to include your user so you only have to type `quorabak` without a user name and you don't want markdown files, only HTML files, and you wanted to scrape 50 items at a time, then you could put the in your .env file

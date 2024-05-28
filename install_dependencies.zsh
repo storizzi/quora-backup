@@ -107,17 +107,28 @@ install_playwright_browsers() {
   fi
 }
 
-# Function to install project dependencies
-install_project_dependencies() {
-  if [ ! -f package.json ]; then
-    echo "package.json not found. Aborting."
-    exit 1
-  fi
-  echo "Installing project dependencies..."
-  npm install
-  if [ $? -ne 0 ]; then
-    echo "Failed to install project dependencies. Aborting."
-    exit 1
+# Function to check if Quora Backup is installed
+check_quorabak_installed() {
+  if ! command -v quorabak &> /dev/null; then
+    echo "Quorabak is not installed."
+    echo "Would you like to install Quora Backup from GitHub? (y/n) \c"
+    read choice
+    case "$choice" in 
+      y|Y ) 
+        echo "Installing Quora Backup from GitHub..."
+        npm install -g git+https://github.com/storizzi/quora-backup.git
+        if [ $? -ne 0 ]; then
+          echo "Failed to install Quora Backup from GitHub. Aborting."
+          exit 1
+        fi
+        ;;
+      * ) 
+        echo "Aborting."
+        exit 1
+        ;;
+    esac
+  else
+    echo "Quorabak is already installed."
   fi
 }
 
@@ -130,6 +141,8 @@ check_and_install_nvm
 check_and_install_node
 check_and_install_playwright
 install_playwright_browsers
-install_project_dependencies
+
+# Check if Quora Backup is installed
+check_quorabak_installed
 
 echo "All dependencies are installed successfully."
