@@ -152,7 +152,7 @@ Running the command will create a directory (e.g. 'Ursula-Userton') and inside t
 To remove the content directories and JSON file:
 
 ```sh
-quorabak clean
+quorabak clean "<Quora Username>"
 ```
 or just delete the directory corresponding to the username.
 
@@ -196,6 +196,20 @@ OUTPUT_MARKDOWN_FILES=true
 HTML_WIDTH=80
 ```
 
+Note - you do not have to include all of these - e.g. if you just wanted to include your user so you only have to type `quorabak` without a user name and you don't want markdown files, only HTML files, and you wanted to scrape 50 items at a time, then you could put the in your .env file
+
+```plaintext
+QUORA_USERNAME=Ursula Userton
+NUM_ITEMS=50
+OUTPUT_MARKDOWN_FILES=no
+```
+
+Note this file doesn't appear in Finder (things starting with dot are hidden by default). Open the directory in Terminal, and edit it using your favourite editor - or you can use the inbuilt mac text-edit textEdit using:
+
+```sh
+open -a TextEdit .env 
+```
+
 ## Notes
 
 - This script is designed for backing up answers for a user without requiring logging into Quora. It is not intended for general scraping of Quora.
@@ -204,14 +218,3 @@ HTML_WIDTH=80
 - There's a very good chance it will stop working, as it relies on a specific page structure being in place, and Quora does tend to change this quite regularly. Let me know if it stops working, and I'll endeavour to get it working again.
 - I will try to improve the script to extract further information in future versions, and improve formatting. I've tried to improve the main output HTML over the raw HTML, but I'm sure it can be improved upon. I have tried to reduce the redundant spans, and removed the excessive formatting in the raw html, to get bold and italics as the only formatting - as this is the main thing that's useful for converting to Markdown.
 - I've only tested this on OSX (a Mac). Let me know if you have issues on Linux / WSL on a PC.
-
-# Quora Backup
-
-## Installation
-
-* npm i
-* npx playwright install
-
-## Run
-
-* node quora-backup.js
