@@ -125,4 +125,59 @@ const convertHtmlToMarkdown = (htmlContent) => {
   return markdownContent;
 };
 
-module.exports = { formatUsername, sanitizeFilename, cleanHtml, convertHtmlToMarkdown };
+const parseDate = (dateText) => {
+  const now = new Date();
+  let date;
+
+  // Remove the 'Updated ' prefix if present
+  dateText = dateText.replace(/^Updated\s+/i, '');
+
+  try {
+    if (dateText.includes('Today')) {
+      date = now;
+    } else if (dateText.includes('Yesterday')) {
+      date = new Date(now);
+      date.setDate(now.getDate() - 1);
+    } else if (dateText.includes('mo')) {
+      const monthsAgo = parseInt(dateText, 10);
+      date = new Date(now);
+      date.setMonth(now.getMonth() - monthsAgo);
+    } else if (dateText.includes('y')) {
+      const yearsAgo = parseInt(dateText, 10);
+      date = new Date(now);
+      date.setFullYear(now.getFullYear() - yearsAgo);
+    } else if (dateText.includes('d')) {
+      const daysAgo = parseInt(dateText, 10);
+      date = new Date(now);
+      date.setDate(now.getDate() - daysAgo);
+    } else if (dateText.includes('h')) {
+      const hoursAgo = parseInt(dateText, 10);
+      date = new Date(now);
+      date.setHours(now.getHours() - hoursAgo);
+    } else if (dateText.includes('m')) {
+      const minutesAgo = parseInt(dateText, 10);
+      date = new Date(now);
+      date.setMinutes(now.getMinutes() - minutesAgo);
+    } else if (['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].some(day => dateText.includes(day))) {
+      const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+      const todayIndex = now.getDay();
+      const dayIndex = daysOfWeek.findIndex(day => dateText.includes(day));
+      let daysAgo = todayIndex - dayIndex;
+      if (daysAgo <= 0) daysAgo += 7;
+      date = new Date(now);
+      date.setDate(now.getDate() - daysAgo);
+    } else {
+      date = new Date(dateText);
+    }
+
+    if (isNaN(date.getTime())) {
+      throw new Error('Invalid date');
+    }
+
+    return date.toISOString();
+  } catch (error) {
+    return '';
+  }
+};
+
+module.exports = { formatUsername, sanitizeFilename, cleanHtml, convertHtmlToMarkdown, parseDate };

@@ -1,6 +1,6 @@
 const fs = require('fs');
 const path = require('path');
-const { cleanHtml, sanitizeFilename } = require('./utils');
+const { cleanHtml, sanitizeFilename, parseDate } = require('./utils');
 const { saveAnswerContent } = require('./contentWriter');
 
 const escapeQuotes = (text) => {
@@ -25,38 +25,35 @@ const scrapeAnswers = async (page, quoraUsername, existingAnswers, template, con
       const title = await elementHandle.innerText();
       if (!existingTitles.has(title)) {
         try {
-          await elementHandle.click();
-          await page.waitForTimeout(answerClickMs);
+          const parentDiv = await elementHandle.$('xpath=../../../../../../..');
+          const linkHandle = await parentDiv.$('a.answer_timestamp');
+          if (linkHandle) {
+            const absoluteUrl = await linkHandle.getAttribute('href');
+            const dateText = await linkHandle.innerText();
+            const datePosted = parseDate(dateText);
 
-          const escapedTitle = escapeQuotes(title);
-          const newElementHandle = await page.$(`div[class^="QuestionTitle"]:has-text("${escapedTitle}")`);
-          if (newElementHandle) {
-            const parentDiv = await newElementHandle.$('xpath=../../../../../..');
-            if (debugHtml) {
-              const parentHtml = await parentDiv.innerHTML();
-              console.log(`Debug HTML for title: ${title}\n${parentHtml}`);
+            const answerData = { question: title, url: `${absoluteUrl}` };
+            if (datePosted) {
+              answerData.datePosted = datePosted;
             }
-            const linkHandle = await parentDiv.$('a');
-            if (linkHandle) {
-              let url = await linkHandle.getAttribute('href');
-              url += `/answer/${quoraUsername}`;
-              results.push({ question: title, url });
-              existingTitles.add(title);
-              newItemsCount++;
-              checkedItemsCount++;
 
-              if (consoleOutput) {
-                console.log(`Title: ${title}`);
-                console.log(`URL: ${url}`);
+            results.push(answerData);
+            existingTitles.add(title);
+            newItemsCount++;
+            checkedItemsCount++;
+
+            if (consoleOutput) {
+              console.log(`Title: ${title}`);
+              console.log(`URL: ${absoluteUrl}`);
+              if (datePosted) {
+                console.log(`Date Posted: ${datePosted}`);
               }
-            } else {
-              console.log(`Link not found for title: ${title}`);
             }
           } else {
-            console.log(`Element not found for title: ${title}`);
+            console.log(`Link not found for title: ${title}`);
           }
         } catch (error) {
-          console.log(`Failed to extract URL for title: ${title}`, error);
+          console.log(`Failed to extract URL and date for title: ${title}`, error);
         }
       } else {
         checkedItemsCount++;

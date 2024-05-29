@@ -1,7 +1,7 @@
 # Quora Backup Script
 
 * **[License](./LICENSE.txt):** MIT
-* **[Version](./RELEASES.md):** 0.2
+* **[Version](./RELEASES.md):** 0.3
 * **Usage:** quorabak "quora user name"
 
 ## Table of Contents
@@ -217,7 +217,7 @@ quorabak "<Quora Username>"
 ```
 where `<Quora Username>` is typically your name - e.g. 'Ursula Userton'
 
-Running the command will create a directory (e.g. 'Ursula-Userton') and inside this, generate a file `answers.json` which contains a list of the answers with their original URLs together with which content files have been written out. It also creates further sub-directories 'raw-html' for the unfiltered answer HTML, 'html' for cleaned-up html, and markdown in the 'md' directory (which is generated from the cleaned-up html).
+Running the command will create a directory (e.g. 'Ursula-Userton') and inside this, generate a file `answers.json` which contains a list of the answers with their original URLs together with which content files have been written out and the estimated creation / update date. It also creates further sub-directories 'raw-html' for the unfiltered answer HTML, 'html' for cleaned-up html, and markdown in the 'md' directory (which is generated from the cleaned-up html).
 
 To remove the content directories and JSON file:
 
