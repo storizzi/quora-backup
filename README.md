@@ -61,7 +61,7 @@ npm update quorabak
 
 ### Using a `.env` File
 
-Create a `.env` file in the project directory to set environment variables:
+Create a `.env` file in the project directory to set environment variables through a file - e.g.
 
 ```plaintext
 QUORA_USERNAME=your-quora-username
@@ -79,6 +79,8 @@ HTML_WIDTH=80
 DEBUG_ENV_VARS=false
 RETRY_FAILED_CONTENT: true
 ```
+
+Check out the [Environment Variables](#environment-variables) section for an explanation of all the available configuration options.
 
 Note - you do not have to include all of these - e.g. if you just wanted to include your user so you only have to type `quorabak` without a user name and you don't want markdown files, only HTML files, and you wanted to scrape 50 items at a time, then you could put the in your .env file
 
