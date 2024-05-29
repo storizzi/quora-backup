@@ -4,6 +4,26 @@
 * **[Version](./RELEASES.md):** 0.2
 * **Usage:** quorabak "quora user name"
 
+## Table of Contents
+- [Quora Backup Script](#quora-backup-script)
+  - [Table of Contents](#table-of-contents)
+  - [Purpose](#purpose)
+  - [Quick Approach](#quick-approach)
+  - [Quick Update](#quick-update)
+    - [Using a `.env` File](#using-a-env-file)
+  - [Uninstall npm package](#uninstall-npm-package)
+      - [Install `nvm` (Node Version Manager)](#install-nvm-node-version-manager)
+      - [Install Node.js using `nvm`](#install-nodejs-using-nvm)
+    - [Other Dependencies](#other-dependencies)
+  - [Installation](#installation)
+    - [npm install from github](#npm-install-from-github)
+    - [Clone method](#clone-method)
+      - [Setting Up as a Command](#setting-up-as-a-command)
+  - [Usage](#usage)
+    - [Running the Script](#running-the-script)
+    - [Environment Variables](#environment-variables)
+  - [Notes](#notes)
+
 ## Purpose
 
 This script is designed to back up a user's Quora answers without requiring logging into Quora. It scrapes the public profile of a specified user and saves their answers in HTML and Markdown formats.
@@ -37,6 +57,41 @@ If you want to get the latest version of the script after installing it, just us
 
 ```sh
 npm update quorabak
+```
+
+### Using a `.env` File
+
+Create a `.env` file in the project directory to set environment variables:
+
+```plaintext
+QUORA_USERNAME=your-quora-username
+NUM_ITEMS=10
+MAX_RETRIES=20
+SCROLL_TIMEOUT_MS=1000
+ANSWER_CLICK_MS=300
+CONSOLE_OUTPUT=true
+DEBUG_HTML=false
+INCLUDE_ANSWER_TEXT=true
+HTML_TEMPLATE_FILENAME=template.html
+OUTPUT_HTML_FILES=true
+OUTPUT_MARKDOWN_FILES=true
+HTML_WIDTH=80
+DEBUG_ENV_VARS=false
+RETRY_FAILED_CONTENT: true
+```
+
+Note - you do not have to include all of these - e.g. if you just wanted to include your user so you only have to type `quorabak` without a user name and you don't want markdown files, only HTML files, and you wanted to scrape 50 items at a time, then you could put the in your .env file
+
+```plaintext
+QUORA_USERNAME=Ursula Userton
+NUM_ITEMS=50
+OUTPUT_MARKDOWN_FILES=no
+```
+
+Note this file doesn't appear in Finder (things starting with dot are hidden by default). Open the directory in Terminal, and edit it using your favourite editor - or you can use the inbuilt mac text-edit textEdit using:
+
+```sh
+open -a TextEdit .env 
 ```
 
 ## Uninstall npm package
@@ -193,41 +248,6 @@ DEBUG_ENV_VARS=false
 - `CONSOLE_OUTPUT`: Set to `true`, `yes`, `1`, or `on` to enable console output of data for debugging purposes. Default is false.
 - `DEBUG_HTML`: Set to `true`, `yes`, `1`, or `on` to enable HTML debugging output. Default is false.
 - `DEBUG_ENV_VARS`: Set to `true`, `yes`, `1`, or `on` to debug where environment variables are being set from and how they are being overriden. Default is false.
-
-### Using a `.env` File
-
-Create a `.env` file in the project directory to set environment variables:
-
-```plaintext
-QUORA_USERNAME=your-quora-username
-NUM_ITEMS=10
-MAX_RETRIES=20
-SCROLL_TIMEOUT_MS=1000
-ANSWER_CLICK_MS=300
-CONSOLE_OUTPUT=true
-DEBUG_HTML=false
-INCLUDE_ANSWER_TEXT=true
-HTML_TEMPLATE_FILENAME=template.html
-OUTPUT_HTML_FILES=true
-OUTPUT_MARKDOWN_FILES=true
-HTML_WIDTH=80
-DEBUG_ENV_VARS=false
-RETRY_FAILED_CONTENT: true
-```
-
-Note - you do not have to include all of these - e.g. if you just wanted to include your user so you only have to type `quorabak` without a user name and you don't want markdown files, only HTML files, and you wanted to scrape 50 items at a time, then you could put the in your .env file
-
-```plaintext
-QUORA_USERNAME=Ursula Userton
-NUM_ITEMS=50
-OUTPUT_MARKDOWN_FILES=no
-```
-
-Note this file doesn't appear in Finder (things starting with dot are hidden by default). Open the directory in Terminal, and edit it using your favourite editor - or you can use the inbuilt mac text-edit textEdit using:
-
-```sh
-open -a TextEdit .env 
-```
 
 ## Notes
 
