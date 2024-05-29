@@ -54,8 +54,13 @@ const backupQuora = async (config) => {
   }
 
   if (includeAnswerText) {
-    const updatedResults = await saveAnswerContent(context, results, existingAnswers, template, config.consoleOutput, config, quoraUsername);
+    const { results: updatedResults, totalWriteCounts, totalFailureCounts } = await saveAnswerContent(context, results, existingAnswers, template, config.consoleOutput, config, quoraUsername);
     fs.writeFileSync(answersFilePath, JSON.stringify(updatedResults, null, 2));
+
+    console.log(`Total files written: HTML (${totalWriteCounts.html}), Markdown (${totalWriteCounts.md}), Raw HTML (${totalWriteCounts.raw_html})`);
+    if (totalFailureCounts.html > 0 || totalFailureCounts.md > 0 || totalFailureCounts.raw_html > 0) {
+      console.error(`Failures: HTML (${totalFailureCounts.html}), Markdown (${totalFailureCounts.md}), Raw HTML (${totalFailureCounts.raw_html})`);
+    }
   } else {
     console.log('Skipping saving answer text content.');
   }

@@ -1,7 +1,7 @@
 # Quora Backup Script
 
 * [License](./LICENSE.txt)
-* Version 0.1
+* Version 0.2
 * Usage: quorabak "quora user name"
 
 ## Purpose
@@ -152,7 +152,7 @@ quorabak "<Quora Username>"
 ```
 where <Quora Username> is typically your name - e.g. 'Ursula Userton'
 
-Running the command will create a directory (e.g. 'Ursula-Userton') and inside this, generate a file `answers.json` which contains a list of the answers with their original URLs, and further sub-directories 'raw-html' for the unfiltered answer HTML, 'html' for cleaned-up html, and markdown in the 'md' directory (which is generated from the cleaned-up html).
+Running the command will create a directory (e.g. 'Ursula-Userton') and inside this, generate a file `answers.json` which contains a list of the answers with their original URLs together which content files have been written out, and further sub-directories 'raw-html' for the unfiltered answer HTML, 'html' for cleaned-up html, and markdown in the 'md' directory (which is generated from the cleaned-up html).
 
 To remove the content directories and JSON file:
 
@@ -177,6 +177,7 @@ The variables and their descriptions are as follows:
 - `HTML_WIDTH`: The maximum width for HTML lines. Default is 80 characters.
 DEBUG_ENV_VARS=false
 - `OUTPUT_MARKDOWN_FILES`: Set to `true`, `yes`, `1`, or `on` to output Markdown files. This is on by default.
+- `RETRY_FAILED_CONTENT`: Set to `true`, `yes`, `1`, or `on` if you want to retry downloading content pages if it did not work before. This also works if you previously excluded a content type (e.g. md) and now want to include it. This is on by default.
 - `MAX_RETRIES`: The maximum number of retries for scraping. Default is 20.
 - `SCROLL_TIMEOUT_MS`: The timeout for scrolling the page. Default is 1000 ms.
 - `ANSWER_CLICK_MS`: The delay after clicking an answer. Default is 300 ms.
@@ -203,6 +204,7 @@ OUTPUT_HTML_FILES=true
 OUTPUT_MARKDOWN_FILES=true
 HTML_WIDTH=80
 DEBUG_ENV_VARS=false
+RETRY_FAILED_CONTENT: true
 ```
 
 Note - you do not have to include all of these - e.g. if you just wanted to include your user so you only have to type `quorabak` without a user name and you don't want markdown files, only HTML files, and you wanted to scrape 50 items at a time, then you could put the in your .env file

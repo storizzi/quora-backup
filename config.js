@@ -17,7 +17,7 @@ const loadEnv = () => {
     HTML_WIDTH: 80,
     OUTPUT_HTML_FILES: 'true',
     OUTPUT_MARKDOWN_FILES: 'true',
-    RETRY_FAILED_CONTENT: 'false'
+    RETRY_FAILED_CONTENT: 'true'
   };
 
   const envConfig = {};
