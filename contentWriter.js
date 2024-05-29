@@ -47,7 +47,27 @@ const saveAnswerContent = async (context, results, existingAnswers, template, co
   console.log('Saving answer text content to:', rawContentDir, config.outputHtmlFiles ? 'and' : '', config.outputHtmlFiles ? path.join(process.cwd(), usernameDir, 'html') : '', config.outputMarkdownFiles ? 'and' : '', config.outputMarkdownFiles ? path.join(process.cwd(), usernameDir, 'md') : '');
 
   for (const result of results) {
-    if (!existingAnswers.some(answer => answer.question === result.question)) {
+    const existingAnswer = existingAnswers.find(answer => answer.question === result.question);
+    let needsUpdate = false;
+
+    if (existingAnswer) {
+      // Check for missing files
+      if (config.retryFailedContent) {
+        if (!existingAnswer.files || !existingAnswer.files.raw_html || !fs.existsSync(path.join(process.cwd(), existingAnswer.files.raw_html))) {
+          needsUpdate = true;
+        }
+        if (config.outputHtmlFiles && (!existingAnswer.files || !existingAnswer.files.html || !fs.existsSync(path.join(process.cwd(), existingAnswer.files.html)))) {
+          needsUpdate = true;
+        }
+        if (config.outputMarkdownFiles && (!existingAnswer.files || !existingAnswer.files.md || !fs.existsSync(path.join(process.cwd(), existingAnswer.files.md)))) {
+          needsUpdate = true;
+        }
+      }
+    } else {
+      needsUpdate = true;
+    }
+
+    if (needsUpdate) {
       const answerPage = await context.newPage();
       await answerPage.goto(result.url, { waitUntil: 'networkidle' });
 

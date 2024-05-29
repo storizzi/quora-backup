@@ -16,7 +16,8 @@ const loadEnv = () => {
     HTML_TEMPLATE_FILENAME: 'template.html',
     HTML_WIDTH: 80,
     OUTPUT_HTML_FILES: 'true',
-    OUTPUT_MARKDOWN_FILES: 'true'
+    OUTPUT_MARKDOWN_FILES: 'true',
+    RETRY_FAILED_CONTENT: 'false'
   };
 
   const envConfig = {};
@@ -55,7 +56,7 @@ const loadEnv = () => {
     const relevantEnvVars = [
       'QUORA_USERNAME', 'NUM_ITEMS', 'MAX_RETRIES', 'SCROLL_TIMEOUT_MS',
       'ANSWER_CLICK_MS', 'CONSOLE_OUTPUT', 'DEBUG_HTML', 'INCLUDE_ANSWER_TEXT',
-      'HTML_TEMPLATE_FILENAME', 'HTML_WIDTH', 'OUTPUT_HTML_FILES', 'OUTPUT_MARKDOWN_FILES'
+      'HTML_TEMPLATE_FILENAME', 'HTML_WIDTH', 'OUTPUT_HTML_FILES', 'OUTPUT_MARKDOWN_FILES', 'RETRY_FAILED_CONTENT'
     ];
 
     relevantEnvVars.forEach((varName) => {
@@ -100,6 +101,7 @@ const getConfig = (cliArgs) => {
     htmlWidth: cliArgs.htmlWidth !== undefined ? parseInt(cliArgs.htmlWidth, 10) : parseInt(finalEnvConfig.HTML_WIDTH, 10),
     outputHtmlFiles: cliArgs.outputHtmlFiles !== undefined ? getBooleanValue(cliArgs.outputHtmlFiles) : getBooleanValue(finalEnvConfig.OUTPUT_HTML_FILES),
     outputMarkdownFiles: cliArgs.outputMarkdownFiles !== undefined ? getBooleanValue(cliArgs.outputMarkdownFiles) : getBooleanValue(finalEnvConfig.OUTPUT_MARKDOWN_FILES),
+    retryFailedContent: getBooleanValue(cliArgs.retryFailedContent !== undefined ? cliArgs.retryFailedContent : finalEnvConfig.RETRY_FAILED_CONTENT)
   };
 
   if (!formattedUsername) {
