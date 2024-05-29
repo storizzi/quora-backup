@@ -1,5 +1,15 @@
 #!/bin/zsh
 
+# Check if --y parameter is passed
+AUTO_CONFIRM=false
+for arg in "$@"
+do
+    if [[ "$arg" == "--y" ]]; then
+        AUTO_CONFIRM=true
+        break
+    fi
+done
+
 # Function to check and install Homebrew
 check_and_install_brew() {
   if ! command -v brew &> /dev/null; then
@@ -111,8 +121,12 @@ install_playwright_browsers() {
 check_quorabak_installed() {
   if ! command -v quorabak &> /dev/null; then
     echo "Quorabak is not installed."
-    echo "Would you like to install Quora Backup from GitHub? (y/n) \c"
-    read choice
+    if [ "$AUTO_CONFIRM" = true ]; then
+      choice="y"
+    else
+      echo "Would you like to install Quora Backup from GitHub? (y/n) \c"
+      read choice
+    fi
     case "$choice" in 
       y|Y ) 
         echo "Installing Quora Backup from GitHub..."

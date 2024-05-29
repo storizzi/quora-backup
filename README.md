@@ -14,10 +14,10 @@ It keeps a note of all the questions it has already scraped so that it doesn't t
 
 There are a number of pre-requisites (see below) you may need to install depending on how you have things set up.
 
-If you download the `install_dependencies.zsh` script this will install the required dependencies for you (in an opinionated way) and if it cannot find it, it will prompt you on where to install the Quora Backup script as a command called 'quorabak' (press y to confirm).
+If you download the `install_dependencies.zsh` script this will install the required dependencies for you (in an opinionated way) and it will prompt you on where to install the Quora Backup script as a command called 'quorabak' (press y to confirm you want to install as a command).
 
 ```sh
-curl -O https://raw.githubusercontent.com/storizzi/quora-backup/master/install_dependencies.zsh && chmod +x ./install_dependencies.zsh && ./install_dependencies.zsh
+curl -O https://raw.githubusercontent.com/storizzi/quora-backup/master/install_dependencies.zsh && chmod +x ./install_dependencies.zsh && ./install_dependencies.zsh --y
 ```
 
 Then go to whichever directory you want to download the files to and run the quorabak command with your Quora User Name - e.g.:
