@@ -31,6 +31,14 @@ This downloads 10 documents at a time by default.
 
 If you set up an .env file in this directory, you can adjust settings as described further down this document (e.g. if you want to do more documents at a time)
 
+## Quick Update
+
+If you want to get the latest version of the script after installing it, just use this command:
+
+```sh
+npm update quorabak
+```
+
 ## Uninstall npm package
 
 If you want to uninstall the npm package so the quorabak command goes away, use this command:
@@ -145,14 +153,14 @@ Now you can run the command `quorabak` from any directory.
 
 ### Running the Script
 
-You can run the script using command line parameters without changing any environment variables. For example:
+You can run the script using command line parameters without setting anything else up. For example:
 
 ```sh
 quorabak "<Quora Username>"
 ```
-where <Quora Username> is typically your name - e.g. 'Ursula Userton'
+where `<Quora Username>` is typically your name - e.g. 'Ursula Userton'
 
-Running the command will create a directory (e.g. 'Ursula-Userton') and inside this, generate a file `answers.json` which contains a list of the answers with their original URLs together which content files have been written out, and further sub-directories 'raw-html' for the unfiltered answer HTML, 'html' for cleaned-up html, and markdown in the 'md' directory (which is generated from the cleaned-up html).
+Running the command will create a directory (e.g. 'Ursula-Userton') and inside this, generate a file `answers.json` which contains a list of the answers with their original URLs together with which content files have been written out. It also creates further sub-directories 'raw-html' for the unfiltered answer HTML, 'html' for cleaned-up html, and markdown in the 'md' directory (which is generated from the cleaned-up html).
 
 To remove the content directories and JSON file:
 
@@ -163,9 +171,9 @@ or just delete the directory corresponding to the username.
 
 ### Environment Variables
 
-The script supports several environment variables, which can be set in a `.env` file in the project directory.
+The script supports several environment variables, which can be set in a `.env` file in the project directory (one level above the user-name directory).
 
-There is a sample '.env-example' that can be copied to '.env' as a template.
+There is a sample '.env-example' in the source folder that can be copied to '.env' as a template.
 
 The variables and their descriptions are as follows:
 
@@ -227,5 +235,6 @@ open -a TextEdit .env
 - It keeps a log of questions scraped already so that it doesn't try to get the answer again to save time.
 - Make sure to comply with Quora's terms of service when using this script.
 - There's a very good chance it will stop working, as it relies on a specific page structure being in place, and Quora does tend to change this quite regularly. Let me know if it stops working, and I'll endeavour to get it working again.
+- You'll probably see several pages that don't save correctly. Let me know where this happens (it will probably give you a URL of the location it tried to read) and I'll see if I can add something to deal with edge cases. The good news is that if I do update the script and you re-run it, then it should just try to get the failed ones again automatically using the fix.
 - I will try to improve the script to extract further information in future versions, and improve formatting. I've tried to improve the main output HTML over the raw HTML, but I'm sure it can be improved upon. I have tried to reduce the redundant spans, and removed the excessive formatting in the raw html, to get bold and italics as the only formatting - as this is the main thing that's useful for converting to Markdown.
 - I've only tested this on OSX (a Mac). Let me know if you have issues on Linux / WSL on a PC.
