@@ -6,10 +6,14 @@ const writeContent = async (title, cleanedHtml, config, usernameDir) => {
   const cleanedContentDir = path.join(process.cwd(), usernameDir, 'html');
   const markdownContentDir = path.join(process.cwd(), usernameDir, 'md');
   const sanitizedFilename = sanitizeFilename(title) + '.html';
+  const filePaths = {};
 
   if (config.outputHtmlFiles) {
     const cleanedFilePath = path.join(cleanedContentDir, sanitizedFilename);
     fs.writeFileSync(cleanedFilePath, cleanedHtml);
+    if (fs.existsSync(cleanedFilePath)) {
+      filePaths.html = path.relative(process.cwd(), cleanedFilePath);
+    }
   }
 
   if (config.outputMarkdownFiles) {
@@ -17,7 +21,12 @@ const writeContent = async (title, cleanedHtml, config, usernameDir) => {
     const markdownFilename = sanitizedFilename.replace('.html', '.md');
     const markdownFilePath = path.join(markdownContentDir, markdownFilename);
     fs.writeFileSync(markdownFilePath, markdownContent);
+    if (fs.existsSync(markdownFilePath)) {
+      filePaths.md = path.relative(process.cwd(), markdownFilePath);
+    }
   }
+
+  return filePaths;
 };
 
 const saveAnswerContent = async (context, results, existingAnswers, template, consoleOutput, config, usernameDir) => {
@@ -53,11 +62,21 @@ const saveAnswerContent = async (context, results, existingAnswers, template, co
             const rawFilePath = path.join(rawContentDir, sanitizedFilename);
             fs.writeFileSync(rawFilePath, rawHtml);
 
-            const cleanedHtml = await cleanHtml(rawHtml, result.question, template, config.htmlWidth);
-            await writeContent(result.question, cleanedHtml, config, usernameDir);
+            if (fs.existsSync(rawFilePath)) {
+              result.files = {
+                raw_html: path.relative(process.cwd(), rawFilePath),
+              };
 
-            if (consoleOutput) {
-              console.log(`Saved content for: ${result.question} to ${rawFilePath}${config.outputHtmlFiles ? ' and ' + path.join(process.cwd(), usernameDir, 'html', sanitizedFilename) : ''}${config.outputMarkdownFiles ? ' and ' + path.join(process.cwd(), usernameDir, 'md', sanitizedFilename.replace('.html', '.md')) : ''}`);
+              const cleanedHtml = await cleanHtml(rawHtml, result.question, template, config.htmlWidth);
+              const filePaths = await writeContent(result.question, cleanedHtml, config, usernameDir);
+
+              result.files = { ...result.files, ...filePaths };
+
+              if (consoleOutput) {
+                console.log(`Saved content for: ${result.question} to ${rawFilePath}${filePaths.html ? ' and ' + filePaths.html : ''}${filePaths.md ? ' and ' + filePaths.md : ''}`);
+              }
+            } else {
+              console.log(`Failed to save raw HTML for: ${result.question}`);
             }
           } else {
             console.log(`Content does not have child elements for URL: ${result.url}`);
@@ -72,6 +91,8 @@ const saveAnswerContent = async (context, results, existingAnswers, template, co
       }
     }
   }
+
+  return results; // Return results with the file paths included
 };
 
 module.exports = { saveAnswerContent, writeContent };

@@ -54,7 +54,8 @@ const backupQuora = async (config) => {
   }
 
   if (includeAnswerText) {
-    await saveAnswerContent(context, results, existingAnswers, template, config.consoleOutput, config, quoraUsername);
+    const updatedResults = await saveAnswerContent(context, results, existingAnswers, template, config.consoleOutput, config, quoraUsername);
+    fs.writeFileSync(answersFilePath, JSON.stringify(updatedResults, null, 2));
   } else {
     console.log('Skipping saving answer text content.');
   }

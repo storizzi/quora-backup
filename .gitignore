@@ -3,3 +3,4 @@
 answers.json
 content/
 .env
+*.code-workspace
