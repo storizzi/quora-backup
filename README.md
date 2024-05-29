@@ -1,8 +1,8 @@
 # Quora Backup Script
 
-* [License](./LICENSE.txt)
-* Version 0.2
-* Usage: quorabak "quora user name"
+* **[License](./LICENSE.txt):** MIT
+* **[Version](./RELEASES.md):** 0.2
+* **Usage:** quorabak "quora user name"
 
 ## Purpose
 
