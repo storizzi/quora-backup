@@ -8,7 +8,7 @@ const loadEnv = () => {
     QUORA_USERNAME: '',
     NUM_ITEMS: 10,
     MAX_RETRIES: 20,
-    SCROLL_TIMEOUT_MS: 1000,
+    SCROLL_TIMEOUT_MS: 2000,
     ANSWER_CLICK_MS: 300,
     CONSOLE_OUTPUT: 'false',
     DEBUG_HTML: 'false',

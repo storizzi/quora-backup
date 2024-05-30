@@ -133,39 +133,46 @@ const parseDate = (dateText) => {
   dateText = dateText.replace(/^Updated\s+/i, '');
 
   try {
-    if (dateText.includes('Today')) {
-      date = now;
-    } else if (dateText.includes('Yesterday')) {
-      date = new Date(now);
-      date.setDate(now.getDate() - 1);
-    } else if (dateText.includes('mo')) {
-      const monthsAgo = parseInt(dateText, 10);
-      date = new Date(now);
-      date.setMonth(now.getMonth() - monthsAgo);
-    } else if (dateText.includes('y')) {
-      const yearsAgo = parseInt(dateText, 10);
-      date = new Date(now);
-      date.setFullYear(now.getFullYear() - yearsAgo);
-    } else if (dateText.includes('d')) {
-      const daysAgo = parseInt(dateText, 10);
-      date = new Date(now);
-      date.setDate(now.getDate() - daysAgo);
-    } else if (dateText.includes('h')) {
-      const hoursAgo = parseInt(dateText, 10);
-      date = new Date(now);
-      date.setHours(now.getHours() - hoursAgo);
-    } else if (dateText.includes('m')) {
-      const minutesAgo = parseInt(dateText, 10);
-      date = new Date(now);
-      date.setMinutes(now.getMinutes() - minutesAgo);
+    if (dateText.match(/^[A-Za-z]{3} \d{1,2}$/)) {
+      // Handle formats like 'May 24'
+      date = new Date(Date.UTC(now.getUTCFullYear(), new Date(dateText + ' 01').getUTCMonth(), parseInt(dateText.split(' ')[1])));
+      if (date > now) {
+        date.setUTCFullYear(now.getUTCFullYear() - 1);
+      }
     } else if (['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].some(day => dateText.includes(day))) {
+      // Handle day of the week
       const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-      const todayIndex = now.getDay();
+      const todayIndex = now.getUTCDay();
       const dayIndex = daysOfWeek.findIndex(day => dateText.includes(day));
       let daysAgo = todayIndex - dayIndex;
       if (daysAgo <= 0) daysAgo += 7;
       date = new Date(now);
-      date.setDate(now.getDate() - daysAgo);
+      date.setUTCDate(now.getUTCDate() - daysAgo);
+    } else if (dateText.includes('Today')) {
+      date = now;
+    } else if (dateText.includes('Yesterday')) {
+      date = new Date(now);
+      date.setUTCDate(now.getUTCDate() - 1);
+    } else if (dateText.includes('mo')) {
+      const monthsAgo = parseInt(dateText, 10);
+      date = new Date(now);
+      date.setUTCMonth(now.getUTCMonth() - monthsAgo);
+    } else if (dateText.includes('y')) {
+      const yearsAgo = parseInt(dateText, 10);
+      date = new Date(now);
+      date.setUTCFullYear(now.getUTCFullYear() - yearsAgo);
+    } else if (dateText.includes('d')) {
+      const daysAgo = parseInt(dateText, 10);
+      date = new Date(now);
+      date.setUTCDate(now.getUTCDate() - daysAgo);
+    } else if (dateText.includes('h')) {
+      const hoursAgo = parseInt(dateText, 10);
+      date = new Date(now);
+      date.setUTCHours(now.getUTCHours() - hoursAgo);
+    } else if (dateText.includes('m')) {
+      const minutesAgo = parseInt(dateText, 10);
+      date = new Date(now);
+      date.setUTCMinutes(now.getUTCMinutes() - minutesAgo);
     } else {
       date = new Date(dateText);
     }
