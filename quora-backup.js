@@ -27,13 +27,11 @@ const backupQuora = async (config) => {
 
   let template = '';
   try {
-    // Attempt to read the template file from the current working directory
     const templatePath = path.join(process.cwd(), templateFilename);
     template = fs.readFileSync(templatePath, 'utf8');
   } catch (error) {
     if (error.code === 'ENOENT') {
       try {
-        // If not found, attempt to read the template file from the script directory
         const templatePath = path.join(__dirname, templateFilename);
         template = fs.readFileSync(templatePath, 'utf8');
       } catch (innerError) {
@@ -54,7 +52,7 @@ const backupQuora = async (config) => {
   }
 
   if (includeAnswerText) {
-    const { results: updatedResults, totalWriteCounts, totalFailureCounts } = await saveAnswerContent(context, results, existingAnswers, template, config.consoleOutput, config, quoraUsername);
+    const { results: updatedResults, totalWriteCounts, totalFailureCounts } = await saveAnswerContent(context, results, existingAnswers, template, config);
     fs.writeFileSync(answersFilePath, JSON.stringify(updatedResults, null, 2));
 
     console.log(`Total files written: HTML (${totalWriteCounts.html}), Markdown (${totalWriteCounts.md}), Raw HTML (${totalWriteCounts.raw_html})`);

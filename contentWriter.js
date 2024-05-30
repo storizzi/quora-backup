@@ -19,11 +19,18 @@ const writeContent = async (title, cleanedHtml, config, usernameDir) => {
     raw_html: 0,
   };
 
+  if (!fs.existsSync(path.join(process.cwd(), usernameDir))) {
+    fs.mkdirSync(path.join(process.cwd(), usernameDir), { recursive: true });
+  }
+
   if (config.outputHtmlFiles) {
+    if (!fs.existsSync(cleanedContentDir)) {
+      fs.mkdirSync(cleanedContentDir, { recursive: true });
+    }
     const cleanedFilePath = path.join(cleanedContentDir, sanitizedFilename);
     fs.writeFileSync(cleanedFilePath, cleanedHtml);
     if (fs.existsSync(cleanedFilePath)) {
-      filePaths.html = path.relative(process.cwd(), cleanedFilePath);
+      filePaths.html = path.relative(usernameDir, cleanedFilePath);
       writeCounts.html++;
     } else {
       failureCounts.html++;
@@ -31,12 +38,15 @@ const writeContent = async (title, cleanedHtml, config, usernameDir) => {
   }
 
   if (config.outputMarkdownFiles) {
+    if (!fs.existsSync(markdownContentDir)) {
+      fs.mkdirSync(markdownContentDir, { recursive: true });
+    }
     const markdownContent = convertHtmlToMarkdown(cleanedHtml);
     const markdownFilename = sanitizedFilename.replace('.html', '.md');
     const markdownFilePath = path.join(markdownContentDir, markdownFilename);
     fs.writeFileSync(markdownFilePath, markdownContent);
     if (fs.existsSync(markdownFilePath)) {
-      filePaths.md = path.relative(process.cwd(), markdownFilePath);
+      filePaths.md = path.relative(usernameDir, markdownFilePath);
       writeCounts.md++;
     } else {
       failureCounts.md++;
@@ -46,7 +56,8 @@ const writeContent = async (title, cleanedHtml, config, usernameDir) => {
   return { filePaths, writeCounts, failureCounts };
 };
 
-const saveAnswerContent = async (context, results, existingAnswers, template, consoleOutput, config, usernameDir) => {
+const saveAnswerContent = async (context, results, existingAnswers, template, config) => {
+  const usernameDir = config.quoraUsername;
   const rawContentDir = path.join(process.cwd(), usernameDir, 'raw-html');
 
   if (!fs.existsSync(rawContentDir)) {
@@ -82,15 +93,15 @@ const saveAnswerContent = async (context, results, existingAnswers, template, co
     if (existingAnswer) {
       // Check for missing files
       if (config.retryFailedContent) {
-        if (!existingAnswer.files || !existingAnswer.files.raw_html || !fs.existsSync(path.join(process.cwd(), existingAnswer.files.raw_html))) {
+        if (!existingAnswer.files || !existingAnswer.files.raw_html || !fs.existsSync(path.join(usernameDir, existingAnswer.files.raw_html))) {
           needsUpdate = true;
         } else {
-          rawHtml = fs.readFileSync(path.join(process.cwd(), existingAnswer.files.raw_html), 'utf8');
+          rawHtml = fs.readFileSync(path.join(usernameDir, existingAnswer.files.raw_html), 'utf8');
         }
-        if (config.outputHtmlFiles && (!existingAnswer.files || !existingAnswer.files.html || !fs.existsSync(path.join(process.cwd(), existingAnswer.files.html)))) {
+        if (config.outputHtmlFiles && (!existingAnswer.files || !existingAnswer.files.html || !fs.existsSync(path.join(usernameDir, existingAnswer.files.html)))) {
           needsUpdate = true;
         }
-        if (config.outputMarkdownFiles && (!existingAnswer.files || !existingAnswer.files.md || !fs.existsSync(path.join(process.cwd(), existingAnswer.files.md)))) {
+        if (config.outputMarkdownFiles && (!existingAnswer.files || !existingAnswer.files.md || !fs.existsSync(path.join(usernameDir, existingAnswer.files.md)))) {
           needsUpdate = true;
         }
       }
@@ -117,7 +128,7 @@ const saveAnswerContent = async (context, results, existingAnswers, template, co
 
               if (fs.existsSync(rawFilePath)) {
                 result.files = {
-                  raw_html: path.relative(process.cwd(), rawFilePath),
+                  raw_html: path.relative(usernameDir, rawFilePath),
                 };
                 totalWriteCounts.raw_html++;
               } else {
@@ -147,7 +158,7 @@ const saveAnswerContent = async (context, results, existingAnswers, template, co
         totalFailureCounts.html += failureCounts.html;
         totalFailureCounts.md += failureCounts.md;
 
-        if (consoleOutput) {
+        if (config.consoleOutput) {
           console.log(`Saved content for: ${result.question} from raw HTML to ${filePaths.html ? filePaths.html : ''}${filePaths.md ? ' and ' + filePaths.md : ''}`);
         }
       }
@@ -158,3 +169,4 @@ const saveAnswerContent = async (context, results, existingAnswers, template, co
 };
 
 module.exports = { saveAnswerContent, writeContent };
+

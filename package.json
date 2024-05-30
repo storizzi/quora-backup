@@ -1,6 +1,6 @@
 {
   "name": "quora-backup",
-  "version": "0.0.1",
+  "version": "0.0.3",
   "description": "A tool to back up a User's Quora answers without logging in.",
   "main": "cli.js",
   "bin": {

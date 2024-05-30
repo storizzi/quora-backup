@@ -8,8 +8,7 @@ const loadEnv = () => {
     QUORA_USERNAME: '',
     NUM_ITEMS: 10,
     MAX_RETRIES: 20,
-    SCROLL_TIMEOUT_MS: 1000,
-    ANSWER_CLICK_MS: 300,
+    SCROLL_TIMEOUT_MS: 2000,
     CONSOLE_OUTPUT: 'false',
     DEBUG_HTML: 'false',
     INCLUDE_ANSWER_TEXT: 'true',
@@ -55,7 +54,7 @@ const loadEnv = () => {
 
     const relevantEnvVars = [
       'QUORA_USERNAME', 'NUM_ITEMS', 'MAX_RETRIES', 'SCROLL_TIMEOUT_MS',
-      'ANSWER_CLICK_MS', 'CONSOLE_OUTPUT', 'DEBUG_HTML', 'INCLUDE_ANSWER_TEXT',
+      'CONSOLE_OUTPUT', 'DEBUG_HTML', 'INCLUDE_ANSWER_TEXT',
       'HTML_TEMPLATE_FILENAME', 'HTML_WIDTH', 'OUTPUT_HTML_FILES', 'OUTPUT_MARKDOWN_FILES', 'RETRY_FAILED_CONTENT'
     ];
 
@@ -93,7 +92,6 @@ const getConfig = (cliArgs) => {
     numItems: cliArgs.numItems !== undefined ? parseInt(cliArgs.numItems, 10) : parseInt(finalEnvConfig.NUM_ITEMS, 10),
     maxRetries: cliArgs.maxRetries !== undefined ? parseInt(cliArgs.maxRetries, 10) : parseInt(finalEnvConfig.MAX_RETRIES, 10),
     scrollTimeout: cliArgs.scrollTimeout !== undefined ? parseInt(cliArgs.scrollTimeout, 10) : parseInt(finalEnvConfig.SCROLL_TIMEOUT_MS, 10),
-    answerClickMs: cliArgs.answerClickMs !== undefined ? parseInt(cliArgs.answerClickMs, 10) : parseInt(finalEnvConfig.ANSWER_CLICK_MS, 10),
     consoleOutput: cliArgs.consoleOutput !== undefined ? getBooleanValue(cliArgs.consoleOutput) : getBooleanValue(finalEnvConfig.CONSOLE_OUTPUT),
     debugHtml: cliArgs.debugHtml !== undefined ? getBooleanValue(cliArgs.debugHtml) : getBooleanValue(finalEnvConfig.DEBUG_HTML),
     includeAnswerText: cliArgs.includeAnswerText !== undefined ? getBooleanValue(cliArgs.includeAnswerText) : getBooleanValue(finalEnvConfig.INCLUDE_ANSWER_TEXT),

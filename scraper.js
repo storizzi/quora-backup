@@ -1,11 +1,6 @@
 const fs = require('fs');
 const path = require('path');
-const { cleanHtml, sanitizeFilename, parseDate } = require('./utils');
-const { saveAnswerContent } = require('./contentWriter');
-
-const escapeQuotes = (text) => {
-  return text.replace(/"/g, '\\"').replace(/'/g, "\\'");
-};
+const { parseDate } = require('./utils');
 
 const scrapeAnswers = async (page, quoraUsername, existingAnswers, template, config) => {
   const { numItems, maxRetries, scrollTimeout, answerClickMs, consoleOutput, debugHtml } = config;

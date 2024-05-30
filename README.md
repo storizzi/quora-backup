@@ -67,8 +67,7 @@ Create a `.env` file in the project directory to set environment variables throu
 QUORA_USERNAME=your-quora-username
 NUM_ITEMS=10
 MAX_RETRIES=20
-SCROLL_TIMEOUT_MS=1000
-ANSWER_CLICK_MS=300
+SCROLL_TIMEOUT_MS=2000
 CONSOLE_OUTPUT=true
 DEBUG_HTML=false
 INCLUDE_ANSWER_TEXT=true
@@ -244,8 +243,7 @@ DEBUG_ENV_VARS=false
 - `OUTPUT_MARKDOWN_FILES`: Set to `true`, `yes`, `1`, or `on` to output Markdown files. This is on by default.
 - `RETRY_FAILED_CONTENT`: Set to `true`, `yes`, `1`, or `on` if you want to retry downloading content pages if it did not work before. This also works if you previously excluded a content type (e.g. md) and now want to include it. This is on by default.
 - `MAX_RETRIES`: The maximum number of retries for scraping. Default is 20.
-- `SCROLL_TIMEOUT_MS`: The timeout for scrolling the page. Default is 1000 ms.
-- `ANSWER_CLICK_MS`: The delay after clicking an answer. Default is 300 ms.
+- `SCROLL_TIMEOUT_MS`: The timeout for scrolling the page. Default is 2000 ms.
 - `HTML_TEMPLATE_FILENAME`: The HTML template filename. Default is `template.html` in the script directory. The template should contain `{{title}}` for where the question title should appear and `{{content}}` for where the answer should appear. The default file is in the source code directory.
 - `CONSOLE_OUTPUT`: Set to `true`, `yes`, `1`, or `on` to enable console output of data for debugging purposes. Default is false.
 - `DEBUG_HTML`: Set to `true`, `yes`, `1`, or `on` to enable HTML debugging output. Default is false.
